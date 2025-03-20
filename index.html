@@ -54,14 +54,14 @@
             } else if (checkCount >= maxChecks) {
               clearInterval(vectorCheck);
               document.getElementById('vectorStatus').className = 'status-indicator status-error';
-              document.getElementById('vectorStatus').textContent = 'Vector failed to initialize (timeout)';
+              document.getElementById('vectorStatus').textContent = 'Vector failed to initialize (timeout) - please check your ad blocker or privacy settings';
             }
           }, 100);
         };
         
         script.onerror = function() {
           document.getElementById('scriptStatus').className = 'status-indicator status-error';
-          document.getElementById('scriptStatus').textContent = 'Failed to load signals.js';
+          document.getElementById('scriptStatus').textContent = 'Failed to load signals.js - please check your ad blocker or privacy settings';
           document.getElementById('vectorStatus').className = 'status-indicator status-error';
           document.getElementById('vectorStatus').textContent = 'Vector initialization skipped - signals.js failed to load';
         };
@@ -80,5 +80,11 @@
       })();
     </script>
     <h1>Hello this is a test page that loads signals.js</h1>
+    <h2>(Optional!) Feel free to deanonymize yourself by entering your info below - it will go in to Signals SDK and probably be sent to Vector</h2>
+    <form id="identifyForm" action="" method="GET">
+      <input type="email" name="email" placeholder="Enter your email">
+      <input type="text" name="name" placeholder="Enter your name">
+      <input type="submit" id="identifyButton" value="Identify">
+    </form>
   </body>
 </html> 
