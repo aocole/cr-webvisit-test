@@ -1,24 +1,26 @@
+<!DOCTYPE html>
 <html>
   <body>
     <script>
       (function() {
         if (typeof window === 'undefined') return;
-    if (typeof window.signals !== 'undefined') return;
-    var script = document.createElement('script');
-    script.src = 'https://3d9a-97-126-93-9.ngrok-free.app/v1/site/12b990e5-1a91-42e3-9655-65bfbfd5320e/signals.js';
-    script.async = true;
-    window.signals = Object.assign(
-      [],
-      ['page', 'identify', 'form'].reduce(function (acc, method){
-        acc[method] = function () {
-          signals.push([method, arguments]);
-          return signals;
-        };
-       return acc;
-      }, {})
-    );
-    document.head.appendChild(script);
-  })();
-</script>
+        if (typeof window.signals !== 'undefined') return;
+        var script = document.createElement('script');
+        script.src = 'https://cdn.cr-relay.com/v1/site/5bf24a14-02bd-4fd3-8a06-f77a686198e7/signals.js';
+        script.async = true;
+        window.signals = Object.assign(
+          [],
+          ['page', 'identify', 'form'].reduce(function (acc, method){
+            acc[method] = function () {
+              signals.push([method, arguments]);
+              return signals;
+            };
+           return acc;
+          }, {})
+        );
+        document.head.appendChild(script);
+      })();
+    </script>
+    <h1>Hello this is a test page that loads signals.js</h1>
   </body>
 </html> 
