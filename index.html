@@ -1,90 +1,114 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Vector/CR Web Visit Test</title>
-    <style>
-      .status-indicator {
-        padding: 10px;
-        margin: 10px;
-        border-radius: 4px;
-        font-family: sans-serif;
-      }
-      .status-loading {
-        background-color: #fff3cd;
-        color: #856404;
-        border: 1px solid #ffeeba;
-      }
-      .status-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-      }
-      .status-error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="scriptStatus" class="status-indicator status-loading">Loading signals.js...</div>
-    <div id="vectorStatus" class="status-indicator status-loading">Waiting for vector initialization...</div>
-    <script>
-      (function() {
-        if (typeof window === 'undefined') return;
-        if (typeof window.signals !== 'undefined') return;
-        var script = document.createElement('script');
-        script.src = 'http://localhost:3001/v1/site/1002fdd4-b15b-43c7-8e15-68fcf0498a17/signals.js';
-        script.async = true;
-        
-        // Add load and error handlers
-        script.onload = function() {
-          document.getElementById('scriptStatus').className = 'status-indicator status-success';
-          document.getElementById('scriptStatus').textContent = 'signals.js loaded successfully!';
-          
-          // Start checking for vector initialization
-          var checkCount = 0;
-          var maxChecks = 50; // 5 seconds maximum wait time
-          var vectorCheck = setInterval(function() {
-            checkCount++;
-            if (window.vector) {
-              clearInterval(vectorCheck);
-              document.getElementById('vectorStatus').className = 'status-indicator status-success';
-              document.getElementById('vectorStatus').textContent = 'Vector initialized successfully!';
-            } else if (checkCount >= maxChecks) {
-              clearInterval(vectorCheck);
-              document.getElementById('vectorStatus').className = 'status-indicator status-error';
-              document.getElementById('vectorStatus').textContent = 'Vector failed to initialize (timeout) - please check your ad blocker or privacy settings';
-            }
-          }, 100);
-        };
-        
-        script.onerror = function() {
-          document.getElementById('scriptStatus').className = 'status-indicator status-error';
-          document.getElementById('scriptStatus').textContent = 'Failed to load signals.js - please check your ad blocker or privacy settings';
-          document.getElementById('vectorStatus').className = 'status-indicator status-error';
-          document.getElementById('vectorStatus').textContent = 'Vector initialization skipped - signals.js failed to load';
-        };
 
-        window.signals = Object.assign(
-          [],
-          ['page', 'identify', 'form'].reduce(function (acc, method){
-            acc[method] = function () {
-              signals.push([method, arguments]);
-              return signals;
-            };
-           return acc;
-          }, {})
-        );
-        document.head.appendChild(script);
-      })();
-    </script>
-    <h1>Hello this is a test page that loads signals.js</h1>
-    <h2>(Optional!) Feel free to deanonymize yourself by entering your info below - it will go in to Signals SDK and probably be sent to Vector</h2>
-    <form id="identifyForm" action="" method="GET">
-      <input type="email" name="email" placeholder="Enter your email">
-      <input type="text" name="name" placeholder="Enter your name">
-      <input type="submit" id="identifyButton" value="Identify">
-    </form>
-  </body>
-</html> 
+<head>
+  <title>Vector/CR Web Visit Test</title>
+  <style>
+    .status-indicator {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 4px;
+      font-family: sans-serif;
+    }
+
+    .status-loading {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .status-success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="scriptStatus" class="status-indicator status-loading">Loading signals.js...</div>
+  <div id="vectorStatus" class="status-indicator status-loading">Waiting for vector initialization...</div>
+
+  <script src="https://cdn.rudderstack.com/v1/rudder-analytics.min.js"></script>
+  <script>
+    window.rudderanalytics = {
+      getAnonymousId: function() {
+        return 'this-is-my-anon-id';
+      }
+    }
+  </script>
+  <script>
+    try {
+      var anonId = rudderanalytics?.getAnonymousId()
+      if (anonId) {
+        window.signalsSettings = window.signalsSettings || {}
+        window.signalsSettings.userId = anonId
+      }
+    } catch (_err) { }
+
+    (function () {
+      if (typeof window === 'undefined') return;
+      if (typeof window.signals !== 'undefined') return;
+      var script = document.createElement('script');
+      script.src = 'http://localhost:3001/v1/site/1002fdd4-b15b-43c7-8e15-68fcf0498a17/signals.js';
+      script.async = true;
+
+      // Add load and error handlers
+      script.onload = function () {
+        document.getElementById('scriptStatus').className = 'status-indicator status-success';
+        document.getElementById('scriptStatus').textContent = 'signals.js loaded successfully!';
+
+        // Start checking for vector initialization
+        var checkCount = 0;
+        var maxChecks = 50; // 5 seconds maximum wait time
+        var vectorCheck = setInterval(function () {
+          checkCount++;
+          if (window.vector) {
+            clearInterval(vectorCheck);
+            document.getElementById('vectorStatus').className = 'status-indicator status-success';
+            document.getElementById('vectorStatus').textContent = 'Vector initialized successfully!';
+          } else if (checkCount >= maxChecks) {
+            clearInterval(vectorCheck);
+            document.getElementById('vectorStatus').className = 'status-indicator status-error';
+            document.getElementById('vectorStatus').textContent = 'Vector failed to initialize (timeout) - please check your ad blocker or privacy settings';
+          }
+        }, 100);
+      };
+
+      script.onerror = function () {
+        document.getElementById('scriptStatus').className = 'status-indicator status-error';
+        document.getElementById('scriptStatus').textContent = 'Failed to load signals.js - please check your ad blocker or privacy settings';
+        document.getElementById('vectorStatus').className = 'status-indicator status-error';
+        document.getElementById('vectorStatus').textContent = 'Vector initialization skipped - signals.js failed to load';
+      };
+
+      window.signals = Object.assign(
+        [],
+        ['page', 'identify', 'form'].reduce(function (acc, method) {
+          acc[method] = function () {
+            signals.push([method, arguments]);
+            return signals;
+          };
+          return acc;
+        }, {})
+      );
+      document.head.appendChild(script);
+    })();
+  </script>
+  <h1>Hello this is a test page that loads signals.js</h1>
+  <h2>(Optional!) Feel free to deanonymize yourself by entering your info below - it will go in to Signals SDK and
+    probably be sent to Vector</h2>
+  <form id="identifyForm" action="" method="GET">
+    <input type="email" name="email" placeholder="Enter your email">
+    <input type="text" name="name" placeholder="Enter your name">
+    <input type="submit" id="identifyButton" value="Identify">
+  </form>
+</body>
+
+</html>
