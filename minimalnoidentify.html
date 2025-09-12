@@ -9,7 +9,7 @@
             if (typeof window === 'undefined') return;
             if (typeof window.signals !== 'undefined') return;
             var script = document.createElement('script');
-            script.src = 'https://cdn.cr-relay.com/v1/site/5bf24a14-02bd-4fd3-8a06-f77a686198e7/signals.js';
+            script.src = './signalsnoidentify.js';
             script.async = true;
             window.signals = Object.assign(
                 [],
@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <h1>Hello this is a test page that loads signals.js, sets partnerid, and calls identify</h1>
+    <h1>Hello this is a test page that loads signals.js, sets partnerid, and does not call identify</h1>
 </body>
 
 </html>
