@@ -35,23 +35,7 @@
   <div id="scriptStatus" class="status-indicator status-loading">Loading signals.js...</div>
   <div id="vectorStatus" class="status-indicator status-loading">Waiting for vector initialization...</div>
 
-  <script src="https://cdn.rudderstack.com/v1/rudder-analytics.min.js"></script>
   <script>
-    window.rudderanalytics = {
-      getAnonymousId: function() {
-        return 'this-is-my-anon-id';
-      }
-    }
-  </script>
-  <script>
-    try {
-      var anonId = rudderanalytics?.getAnonymousId()
-      if (anonId) {
-        window.signalsSettings = window.signalsSettings || {}
-        window.signalsSettings.userId = anonId
-      }
-    } catch (_err) { }
-
     (function () {
       if (typeof window === 'undefined') return;
       if (typeof window.signals !== 'undefined') return;
