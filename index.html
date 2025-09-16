@@ -74,7 +74,7 @@
 
       window.signals = Object.assign(
         [],
-        {strictDomain: true},
+        {_opts:{strictDomain: true}},
         ['page', 'identify', 'form'].reduce(function (acc, method) {
           acc[method] = function () {
             signals.push([method, arguments]);
